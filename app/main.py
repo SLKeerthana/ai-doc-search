@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
-from app.engine import process_document, get_answer
+from app.engine import process_document, get_answer, get_vectorstore
 import shutil
 import os
 
@@ -18,7 +18,9 @@ async def upload_pdf(file: UploadFile = File(...)):
 
 @app.get("/ask")
 async def ask_question(question: str):
-    # In a real app, you'd load the existing vectorstore from disk
-    # This is a simplified call for the logic flow
-    response = get_answer(question)
+    # Load the existing vectorstore from disk
+    vectorstore = get_vectorstore()
+    
+    # Pass the vectorstore and the question to the get_answer function
+    response = get_answer(vectorstore, question)
     return {"answer": response}
