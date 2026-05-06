@@ -56,4 +56,5 @@ def get_answer(vectorstore, query):
         chain_type="stuff",
         retriever=vectorstore.as_retriever()
     )
-    return qa_chain.invoke(query)
+    response = qa_chain.invoke(query)
+    return response.get("result", response)
