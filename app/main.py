@@ -4,6 +4,8 @@ from typing import List
 from app.engine import process_document, get_answer, get_vectorstore
 import shutil
 import os
+import logging
+from datetime import datetime
 
 app = FastAPI(
     title="AI Document Intelligence API",
@@ -19,6 +21,16 @@ app = FastAPI(
 
 # # --- Endpoints ---
 
+logging.basicConfig(
+    level=logging.INFO,
+    format = '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("logs/app.log")
+    ]
+)
+logger = logging.getLogger("api-logger")
+
 @app.post("/upload",
 tags=["Document Management"],
 summary="Upload and Index a PDF"
@@ -28,6 +40,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     Uploads a PDF file, extracts text, generates embeddings using Ollama, 
     and persists them to the ChromaDB vector store.
     """
+    logger.info(f"Upload started: {file.filename}")
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are supported.")
     
@@ -39,8 +52,10 @@ async def upload_pdf(file: UploadFile = File(...)):
     try:
         # Process and index
         vectorstore = process_document(temp_path)
+        logger.info(f"Successfully indexed {file.filename}")
         return {"status": "success", "message": "Document indexed successfully", "file": file.filename}
     except Exception as e:
+        logger.error(f"Failed to process {file.filename}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         # Clean up the temporary file
