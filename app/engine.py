@@ -8,7 +8,10 @@ from langchain_classic.chains import RetrievalQA
 from dotenv import load_dotenv
 
 load_dotenv()
-CHROMA_PATH = "chroma_db"
+
+DATABASE_PATH = os.getenv("DATABASE_PATH", "chroma_db")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "nomic-embed-text")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "phi3")
 
 def process_document(file_path):
     # 1. Load the PDF
@@ -20,37 +23,37 @@ def process_document(file_path):
     texts = text_splitter.split_documents(documents)
 
     # 3. Create Embeddings and Store in ChromaDB
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     vectorstore = Chroma.from_documents(
         documents=texts, 
         embedding=embeddings,
-        persist_directory=CHROMA_PATH
+        persist_directory=DATABASE_PATH
     )
     return vectorstore
 
 def get_vectorstore(documents=None):
     # Load the persisted vectorstore from disk
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     # Check if the database already exists on disk
-    if os.path.exists(CHROMA_PATH) and documents is None:
+    if os.path.exists(DATABASE_PATH) and documents is None:
         print("--- Loading existing Vector DB ---")
         vectorstore = Chroma(
-            persist_directory=CHROMA_PATH, 
+            persist_directory=DATABASE_PATH, 
             embedding_function=embeddings
         )
     else:
         print("--- Creating new Vector DB ---")
         vectorstore = Chroma.from_documents(
             documents=documents, 
-            persist_directory=CHROMA_PATH, 
-            embedding_function=embeddings
+            persist_directory=DATABASE_PATH, 
+            embedding=embeddings
         )
 
     return vectorstore
 
 def get_answer(vectorstore, query):
     # 4. Setup RetrievalQA Chain
-    llm = ChatOllama(model="phi3", temperature=0)
+    llm = ChatOllama(model=OLLAMA_MODEL, temperature=0)
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
         chain_type="stuff",

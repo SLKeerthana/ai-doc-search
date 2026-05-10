@@ -29,9 +29,9 @@ with st.sidebar:
             # (Note: engine.py needs a loader/splitter logic we discussed earlier)
             from langchain_community.document_loaders import PyPDFLoader
             loader = PyPDFLoader(temp_path)
-            docs = loader.load()
+            documents = loader.load()
             
-            st.session_state.vectorstore = get_vectorstore(documents=docs)
+            st.session_state.vectorstore = get_vectorstore(documents=documents)
             st.success("Indexed & Saved to Disk!")
             os.remove(temp_path)
 
