@@ -27,9 +27,11 @@ logging.basicConfig(
     handlers=[
         logging.StreamHandler(),
         logging.FileHandler("logs/app.log")
-    ]
+    ],
+    force=True
 )
 logger = logging.getLogger("api-logger")
+logger.info("LOGGING SYSTEM INITIALIZED")
 
 @app.post("/upload",
 tags=["Document Management"],
@@ -76,3 +78,7 @@ async def ask_question(question: str = Query(..., examples="What is the main con
     # Pass the vectorstore and the question to the get_answer function
     response = get_answer(vectorstore, question)
     return {"answer": response}
+
+@app.get("/", tags=["Health"])
+async def read_root():
+    return {"status": "ok", "message": "AI Document Intelligence API is running"}    

@@ -18,7 +18,7 @@ def test_upload_no_file():
     assert response.status_code == 422  # Unprocessable Entity (FastAPI default)
 
 def test_invalid_file_type():
-    """Verify that our custom logic rejects non-PDF files."""
+    """Verify that non-PDF files are rejected."""
     # Create a fake text file in memory
     files = {"file": ("test.txt", b"not a pdf", "text/plain")}
     response = client.post("/upload", files=files)
