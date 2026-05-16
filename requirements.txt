@@ -1,0 +1,10 @@
+fastapi==0.136.1
+uvicorn==0.34.0
+langchain-chroma==1.1.0
+langchain-classic==1.0.7
+langchain-community==0.4.1
+langchain-text-splitters==1.1.2
+pydantic==2.13.4
+python-dotenv==1.2.2
+streamlit==1.57.0
+pypdf==5.3.1
