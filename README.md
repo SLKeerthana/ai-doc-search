@@ -68,12 +68,14 @@ pytest tests/
 - 'tests/': Unit tests and fixtures.
 - 'logs/': Generated log files.
 - 'chroma_db/': Generated vector database (excluded from git).
+
 ![alt text](image.png)
 
 
 Screenshots:
 
-![alt text](image-1.png)
+![Landing Page](image-4.png)
 
 
-![alt text](image-2.png)
+
+![Swagger UI](image-3.png)
