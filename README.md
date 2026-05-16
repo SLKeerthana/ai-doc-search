@@ -21,6 +21,7 @@ This project implements a Retrieval-Augmented Generation (RAG) system using Lang
 
 ### 1. Setup Environment
 -bash
+
 python -m venv venv
 # Windows
 venv\Scripts\activate
@@ -31,17 +32,20 @@ source venv/bin/activate
 
 ### 2. Install Dependencies
 -bash
+
 pip install -r requirements.txt
 
 
 ### 3. Start Docker
 Ensure Docker is running and pull the required models:
 -bash
+
 docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 
 
 Pull the specific models needed for the app:
 -bash
+
 docker exec -it ollama ollama pull nomic-embed-text
 docker exec -it ollama ollama pull phi3
 
@@ -50,6 +54,7 @@ docker exec -it ollama ollama pull phi3
 
 ### Local Development (Streamlit)
 -bash
+
 uvicorn app.main:app --reload & streamlit run app/app.py
 
 
@@ -69,10 +74,10 @@ pytest tests/
 - 'logs/': Generated log files.
 - 'chroma_db/': Generated vector database (excluded from git).
 
-![alt text](image.png)
+![Project Structure ](image.png)
 
 
-Screenshots:
+## Screenshots
 
 ![Landing Page](image-4.png)
 
