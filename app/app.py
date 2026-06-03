@@ -26,7 +26,6 @@ with st.sidebar:
                 f.write(uploaded_file.getbuffer())
             
             # 2. Process and Update Persistence
-            # (Note: engine.py needs a loader/splitter logic we discussed earlier)
             from langchain_community.document_loaders import PyPDFLoader
             loader = PyPDFLoader(temp_path)
             documents = loader.load()
